@@ -1,18 +1,60 @@
 'use client'
 
+import { useRef } from 'react'
 import { useCalcStore } from '@/store/useCalcStore'
 import dayjs from 'dayjs'
+import { exportToJson, readJsonFile } from '@/lib/backup'
 
 export default function ReportPage() {
-  const { reportItems, deleteReportItem } = useCalcStore()
+  const { reportItems, memos, deleteReportItem, importStore } = useCalcStore()
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  function handleExport() {
+    exportToJson(
+      { reportItems, memos },
+      `all-in-web-calc-backup-${dayjs().format('YYYYMMDD-HHmm')}.json`
+    )
+  }
+
+  async function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const data = await readJsonFile(file) as { reportItems?: unknown; memos?: unknown }
+      importStore({
+        reportItems: Array.isArray(data.reportItems) ? data.reportItems : undefined,
+        memos: Array.isArray(data.memos) ? data.memos : undefined,
+      })
+    } catch {
+      alert('백업 파일을 읽을 수 없습니다.')
+    }
+    e.target.value = ''
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-5">
-      <div>
-        <h1 className="text-xl font-bold">인사이트 리포트</h1>
-        <p className="text-sm text-[var(--muted-foreground)] mt-1">
-          각 계산기에서 저장한 결과를 모아볼 수 있습니다.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold">인사이트 리포트</h1>
+          <p className="text-sm text-[var(--muted-foreground)] mt-1">
+            각 계산기에서 저장한 결과를 모아볼 수 있습니다.
+          </p>
+        </div>
+        <div className="flex gap-2 shrink-0">
+          <button
+            onClick={handleExport}
+            className="px-3 py-1.5 text-xs border border-[var(--border)] rounded-md hover:bg-[var(--muted)] transition-colors"
+          >
+            백업 내보내기
+          </button>
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="px-3 py-1.5 text-xs border border-[var(--border)] rounded-md hover:bg-[var(--muted)] transition-colors"
+          >
+            백업 가져오기
+          </button>
+          <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+        </div>
       </div>
 
       {reportItems.length === 0 ? (

@@ -28,6 +28,7 @@ interface CalcState {
   deleteMemo: (id: string) => void
   saveReportItem: (item: Omit<ReportItem, 'id' | 'savedAt'>) => void
   deleteReportItem: (id: string) => void
+  importStore: (data: Partial<Pick<CalcState, 'reportItems' | 'memos'>>) => void
 }
 
 const defaultRealEstate: RealEstateInputs = {
@@ -115,6 +116,12 @@ export const useCalcStore = create<CalcState>()(
 
       deleteReportItem: (id) =>
         set((s) => ({ reportItems: s.reportItems.filter((r) => r.id !== id) })),
+
+      importStore: (data) =>
+        set((s) => ({
+          reportItems: data.reportItems ?? s.reportItems,
+          memos: data.memos ?? s.memos,
+        })),
     }),
     { name: 'all-in-web-calc-store' }
   )
