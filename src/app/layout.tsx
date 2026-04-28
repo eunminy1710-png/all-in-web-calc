@@ -6,6 +6,7 @@ import ServiceWorkerRegister from "@/components/layout/ServiceWorkerRegister";
 export const metadata: Metadata = {
   title: "ALL-IN-WEB CALC",
   description: "일상의 모든 계산을 한곳에서",
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
@@ -16,7 +17,6 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full">
       <head>
-        <link rel="manifest" href="/manifest.webmanifest" />
         <meta name="theme-color" content="#3b82f6" />
       </head>
       <body className="h-full antialiased">
