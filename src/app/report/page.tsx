@@ -4,6 +4,24 @@ import { useRef } from 'react'
 import { useCalcStore } from '@/store/useCalcStore'
 import dayjs from 'dayjs'
 import { exportToJson, readJsonFile } from '@/lib/backup'
+import type { ReportItem, Memo } from '@/types'
+
+function isValidReportItem(x: unknown): boolean {
+  if (typeof x !== 'object' || x === null) return false
+  const o = x as Record<string, unknown>
+  return (
+    typeof o.id === 'string' &&
+    typeof o.value === 'number' &&
+    typeof o.summary === 'string' &&
+    typeof o.savedAt === 'string'
+  )
+}
+
+function isValidMemo(x: unknown): boolean {
+  if (typeof x !== 'object' || x === null) return false
+  const o = x as Record<string, unknown>
+  return typeof o.id === 'string' && typeof o.content === 'string'
+}
 
 export default function ReportPage() {
   const { reportItems, memos, deleteReportItem, importStore } = useCalcStore()
@@ -22,8 +40,12 @@ export default function ReportPage() {
     try {
       const data = await readJsonFile(file) as { reportItems?: unknown; memos?: unknown }
       importStore({
-        reportItems: Array.isArray(data.reportItems) ? data.reportItems : undefined,
-        memos: Array.isArray(data.memos) ? data.memos : undefined,
+        reportItems: Array.isArray(data.reportItems)
+          ? (data.reportItems as unknown[]).filter(isValidReportItem) as ReportItem[]
+          : undefined,
+        memos: Array.isArray(data.memos)
+          ? (data.memos as unknown[]).filter(isValidMemo) as Memo[]
+          : undefined,
       })
     } catch {
       alert('백업 파일을 읽을 수 없습니다.')

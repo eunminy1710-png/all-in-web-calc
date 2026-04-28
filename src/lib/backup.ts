@@ -5,8 +5,10 @@ export function exportToJson(data: unknown, filename: string): void {
   const a = document.createElement('a')
   a.href = url
   a.download = filename
+  document.body.appendChild(a)
   a.click()
-  URL.revokeObjectURL(url)
+  document.body.removeChild(a)
+  setTimeout(() => URL.revokeObjectURL(url), 100)
 }
 
 export function readJsonFile(file: File): Promise<unknown> {
