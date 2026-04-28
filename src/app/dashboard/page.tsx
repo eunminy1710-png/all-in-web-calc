@@ -1,4 +1,8 @@
+'use client'
+
 import Link from 'next/link'
+import { useCalcStore } from '@/store/useCalcStore'
+import dayjs from 'dayjs'
 
 const CALC_CARDS = [
   {
@@ -28,11 +32,25 @@ const CALC_CARDS = [
 ]
 
 export default function DashboardPage() {
+  const { reportItems, memos } = useCalcStore()
+  const recent = [...reportItems].reverse().slice(0, 3)
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-xl font-bold text-[var(--foreground)]">대시보드</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">계산기를 선택하세요</p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-white rounded-lg border border-[var(--border)] p-4 text-center">
+          <p className="text-2xl font-bold tabular-nums">{reportItems.length}</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-1">저장된 리포트</p>
+        </div>
+        <div className="bg-white rounded-lg border border-[var(--border)] p-4 text-center">
+          <p className="text-2xl font-bold tabular-nums">{memos.length}</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-1">메모</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -48,11 +66,40 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="text-center">
-        <Link href="/report" className="text-sm text-[var(--primary)] hover:underline">
-          인사이트 리포트 보기 →
-        </Link>
-      </div>
+      {recent.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-[var(--foreground)]">최근 저장 항목</p>
+          {recent.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg border border-[var(--border)] px-4 py-3 flex justify-between items-center"
+            >
+              <div>
+                <p className="text-xs text-[var(--muted-foreground)]">
+                  {item.calculatorLabel} · 시나리오 {item.scenarioKey}
+                </p>
+                <p className="text-sm font-medium">{item.summary}</p>
+              </div>
+              <p className="text-xs text-[var(--muted-foreground)] shrink-0">
+                {dayjs(item.savedAt).format('MM-DD HH:mm')}
+              </p>
+            </div>
+          ))}
+          <div className="text-center">
+            <Link href="/report" className="text-sm text-[var(--primary)] hover:underline">
+              전체 리포트 보기 →
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {recent.length === 0 && (
+        <div className="text-center">
+          <Link href="/report" className="text-sm text-[var(--primary)] hover:underline">
+            인사이트 리포트 보기 →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
