@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import RealEstateCalc from '@/components/calculators/RealEstateCalc'
 import CompareView from '@/components/shared/CompareView'
 import { useCalcStore } from '@/store/useCalcStore'
@@ -16,18 +16,20 @@ export default function RealEstatePage() {
 
   const a = realEstate['A']
   const b = realEstate['B']
-  const monthlyA = calcMonthlyPayment(a.principal * 10000, a.annualRate, a.termMonths)
-  const monthlyB = calcMonthlyPayment(b.principal * 10000, b.annualRate, b.termMonths)
-  const depositA = calcNewDeposit(a.deposit, a.depositIncreaseRate)
-  const depositB = calcNewDeposit(b.deposit, b.depositIncreaseRate)
 
-  const compareRows = [
-    { label: '대출 원금', a: fmt(a.principal), b: fmt(b.principal), unit: '만원' },
-    { label: '연이율', a: String(a.annualRate), b: String(b.annualRate), unit: '%' },
-    { label: '상환 기간', a: String(a.termMonths), b: String(b.termMonths), unit: '개월' },
-    { label: '월 상환금', a: fmt(monthlyA), b: fmt(monthlyB), unit: '원' },
-    { label: '갱신 후 보증금', a: fmt(depositA), b: fmt(depositB), unit: '만원' },
-  ]
+  const compareRows = useMemo(() => {
+    const monthlyA = calcMonthlyPayment(a.principal * 10000, a.annualRate, a.termMonths)
+    const monthlyB = calcMonthlyPayment(b.principal * 10000, b.annualRate, b.termMonths)
+    const depositA = calcNewDeposit(a.deposit, a.depositIncreaseRate)
+    const depositB = calcNewDeposit(b.deposit, b.depositIncreaseRate)
+    return [
+      { label: '대출 원금', a: fmt(a.principal), b: fmt(b.principal), unit: '만원' },
+      { label: '연이율', a: String(a.annualRate), b: String(b.annualRate), unit: '%' },
+      { label: '상환 기간', a: String(a.termMonths), b: String(b.termMonths), unit: '개월' },
+      { label: '월 상환금', a: fmt(monthlyA), b: fmt(monthlyB), unit: '원' },
+      { label: '갱신 후 보증금', a: fmt(depositA), b: fmt(depositB), unit: '만원' },
+    ]
+  }, [a, b])
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">

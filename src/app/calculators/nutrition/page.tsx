@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import NutritionCalc from '@/components/calculators/NutritionCalc'
 import CompareView from '@/components/shared/CompareView'
 import { useCalcStore } from '@/store/useCalcStore'
@@ -12,16 +12,18 @@ export default function NutritionPage() {
 
   const a = nutrition['A']
   const b = nutrition['B']
-  const resA = calcNutritionBreakdown(a.totalGrams, a.carbRatio, a.proteinRatio, a.fatRatio)
-  const resB = calcNutritionBreakdown(b.totalGrams, b.carbRatio, b.proteinRatio, b.fatRatio)
 
-  const compareRows = [
-    { label: '목표 식사량', a: String(a.totalGrams), b: String(b.totalGrams), unit: 'g' },
-    { label: '탄:단:지', a: `${a.carbRatio}:${a.proteinRatio}:${a.fatRatio}`, b: `${b.carbRatio}:${b.proteinRatio}:${b.fatRatio}` },
-    { label: '탄수화물', a: String(resA.carb), b: String(resB.carb), unit: 'g' },
-    { label: '단백질', a: String(resA.protein), b: String(resB.protein), unit: 'g' },
-    { label: '지방', a: String(resA.fat), b: String(resB.fat), unit: 'g' },
-  ]
+  const compareRows = useMemo(() => {
+    const resA = calcNutritionBreakdown(a.totalGrams, a.carbRatio, a.proteinRatio, a.fatRatio)
+    const resB = calcNutritionBreakdown(b.totalGrams, b.carbRatio, b.proteinRatio, b.fatRatio)
+    return [
+      { label: '목표 식사량', a: String(a.totalGrams), b: String(b.totalGrams), unit: 'g' },
+      { label: '탄:단:지', a: `${a.carbRatio}:${a.proteinRatio}:${a.fatRatio}`, b: `${b.carbRatio}:${b.proteinRatio}:${b.fatRatio}` },
+      { label: '탄수화물', a: String(resA.carb), b: String(resB.carb), unit: 'g' },
+      { label: '단백질', a: String(resA.protein), b: String(resB.protein), unit: 'g' },
+      { label: '지방', a: String(resA.fat), b: String(resB.fat), unit: 'g' },
+    ]
+  }, [a, b])
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">

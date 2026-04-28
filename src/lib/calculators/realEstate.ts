@@ -19,6 +19,7 @@ export function calcMonthlyPayment(
   annualRate: number,
   termMonths: number
 ): number {
+  if (termMonths <= 0) return 0
   if (annualRate === 0) {
     return new Decimal(principal).div(termMonths).toNumber()
   }
@@ -36,6 +37,7 @@ export function calcAmortizationSchedule(
   annualRate: number,
   termMonths: number
 ): AmortizationRow[] {
+  if (termMonths <= 0) return []
   const monthlyPayment = calcMonthlyPayment(principal, annualRate, termMonths)
   const r = new Decimal(annualRate).div(100).div(12)
   let balance = new Decimal(principal)
