@@ -1,0 +1,11 @@
+{
+  "name": "ALL-IN-WEB CALC",
+  "short_name": "WebCalc",
+  "description": "일상의 모든 계산을 한곳에서",
+  "start_url": "/dashboard/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "lang": "ko",
+  "icons": []
+}
