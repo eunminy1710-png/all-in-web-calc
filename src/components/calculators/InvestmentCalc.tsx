@@ -11,6 +11,7 @@ import ScenarioTabs from '@/components/shared/ScenarioTabs'
 import ResultCard from '@/components/shared/ResultCard'
 import MemoInput from '@/components/shared/MemoInput'
 import CalcChart from '@/components/shared/CalcChart'
+import NumberInput from '@/components/shared/NumberInput'
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString()
@@ -47,49 +48,41 @@ export default function InvestmentCalc() {
       <div className="bg-white rounded-lg border border-[var(--border)] p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">원금 (만원)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.principal}
-            onChange={(e) => setInvestment(activeScenario, { principal: Number(e.target.value) })}
+            onChange={(v) => setInvestment(activeScenario, { principal: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">연 수익률 (%)</span>
-          <input
-            type="number"
-            step="0.1"
+          <NumberInput
             value={inputs.annualReturn}
-            onChange={(e) => setInvestment(activeScenario, { annualReturn: Number(e.target.value) })}
+            onChange={(v) => setInvestment(activeScenario, { annualReturn: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">투자 기간 (년)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.years}
-            onChange={(e) => setInvestment(activeScenario, { years: Number(e.target.value) })}
+            onChange={(v) => setInvestment(activeScenario, { years: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">진입가 (원)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.entryPrice}
-            onChange={(e) => setInvestment(activeScenario, { entryPrice: Number(e.target.value) })}
+            onChange={(v) => setInvestment(activeScenario, { entryPrice: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">레버리지 (배)</span>
-          <input
-            type="number"
-            step="1"
-            min="1"
+          <NumberInput
             value={inputs.leverage}
-            onChange={(e) => setInvestment(activeScenario, { leverage: Number(e.target.value) })}
+            onChange={(v) => setInvestment(activeScenario, { leverage: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>

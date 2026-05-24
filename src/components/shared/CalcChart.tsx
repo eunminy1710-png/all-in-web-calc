@@ -41,6 +41,7 @@ export default function CalcChart(props: CalcChartProps) {
             tickFormatter={(v: number) => `${(v / 10000).toFixed(0)}만`}
           />
           <Tooltip formatter={(v) => `${Number(v).toLocaleString()}원`} />
+          {props.lines.length > 1 && <Legend />}
           {props.lines.map((l) => (
             <Line
               key={l.key}

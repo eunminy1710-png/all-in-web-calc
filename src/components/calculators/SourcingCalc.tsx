@@ -7,6 +7,7 @@ import ScenarioTabs from '@/components/shared/ScenarioTabs'
 import ResultCard from '@/components/shared/ResultCard'
 import MemoInput from '@/components/shared/MemoInput'
 import CalcChart from '@/components/shared/CalcChart'
+import NumberInput from '@/components/shared/NumberInput'
 
 function fmt(n: number) {
   return Math.round(n).toLocaleString()
@@ -47,48 +48,41 @@ export default function SourcingCalc() {
       <div className="bg-white rounded-lg border border-[var(--border)] p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">원가 (외화)</span>
-          <input
-            type="number"
-            step="0.01"
+          <NumberInput
             value={inputs.costForeign}
-            onChange={(e) => setSourcing(activeScenario, { costForeign: Number(e.target.value) })}
+            onChange={(v) => setSourcing(activeScenario, { costForeign: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">환율 (원/외화)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.exchangeRate}
-            onChange={(e) => setSourcing(activeScenario, { exchangeRate: Number(e.target.value) })}
+            onChange={(v) => setSourcing(activeScenario, { exchangeRate: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">배송비 (원)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.shippingKrw}
-            onChange={(e) => setSourcing(activeScenario, { shippingKrw: Number(e.target.value) })}
+            onChange={(v) => setSourcing(activeScenario, { shippingKrw: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">수수료율 (%)</span>
-          <input
-            type="number"
-            step="0.1"
+          <NumberInput
             value={inputs.feeRate}
-            onChange={(e) => setSourcing(activeScenario, { feeRate: Number(e.target.value) })}
+            onChange={(v) => setSourcing(activeScenario, { feeRate: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-[var(--muted-foreground)] text-xs">판매가 (원)</span>
-          <input
-            type="number"
+          <NumberInput
             value={inputs.sellPriceKrw}
-            onChange={(e) => setSourcing(activeScenario, { sellPriceKrw: Number(e.target.value) })}
+            onChange={(v) => setSourcing(activeScenario, { sellPriceKrw: v })}
             className="border border-[var(--border)] rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary)] tabular-nums"
           />
         </label>
